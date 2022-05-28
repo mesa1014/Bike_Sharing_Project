@@ -1,2 +1,2 @@
 # Bike_Sharing_Project
-Predicting Bike-Sharing Data using a neural network from scratch.
+Predicting bike-sharing data using a neural network from scratch using only numpy.
