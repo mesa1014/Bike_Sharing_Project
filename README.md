@@ -1,6 +1,7 @@
 
-# Your first neural network
+# Bike Sharing Project
 
+A neural network was implemented using only NumPy.
 In this project, you'll build your first neural network and use it to predict daily bike rental ridership. We've provided some of the code, but left the implementation of the neural network up to you (for the most part). After you've submitted this project, feel free to explore the data and the model more.
 
 
@@ -203,7 +204,7 @@ rides[:24*10].plot(x='dteday', y='cnt')
 
 
 
-![png](output_6_1.png)
+![png](images/output_6_1.png)
 
 
 ### Dummy variables
@@ -216,7 +217,7 @@ for each in dummy_fields:
     dummies = pd.get_dummies(rides[each], prefix=each, drop_first=False)
     rides = pd.concat([rides, dummies], axis=1)
 
-fields_to_drop = ['instant', 'dteday', 'season', 'weathersit', 
+fields_to_drop = ['instant', 'dteday', 'season', 'weathersit',
                   'weekday', 'atemp', 'mnth', 'workingday', 'hr']
 data = rides.drop(fields_to_drop, axis=1)
 data.head()
@@ -405,10 +406,10 @@ The scaling factors are saved so we can go backwards when we use the network for
 
 
 ```python
-# Save data for approximately the last 21 days 
+# Save data for approximately the last 21 days
 test_data = data[-21*24:]
 
-# Now remove the test data from the data set 
+# Now remove the test data from the data set
 data = data[:-21*24]
 
 # scaling
@@ -452,7 +453,7 @@ Below, you have these tasks:
 2. Implement the forward pass in the `train` method.
 3. Implement the backpropagation algorithm in the `train` method, including calculating the output error.
 4. Implement the forward pass in the `run` method.
-  
+
 
 
 ```python
@@ -486,19 +487,19 @@ test_w_h_o = np.array([[0.3],
                        [-0.1]])
 
 class TestMethods(unittest.TestCase):
-    
+
     ##########
     # Unit tests for data loading
     ##########
-    
+
     def test_data_path(self):
         # Test that file path to dataset has been unaltered
         self.assertTrue(data_path.lower() == 'bike-sharing-dataset/hour.csv')
-        
+
     def test_data_loaded(self):
         # Test that data frame loaded
         self.assertTrue(isinstance(rides, pd.DataFrame))
-    
+
     ##########
     # Unit tests for network functionality
     ##########
@@ -513,14 +514,14 @@ class TestMethods(unittest.TestCase):
         network = NeuralNetwork(3, 2, 1, 0.5)
         network.weights_input_to_hidden = test_w_i_h.copy()
         network.weights_hidden_to_output = test_w_h_o.copy()
-        
+
         network.train(inputs, targets)
-        self.assertTrue(np.allclose(network.weights_hidden_to_output, 
-                                    np.array([[ 0.37275328], 
+        self.assertTrue(np.allclose(network.weights_hidden_to_output,
+                                    np.array([[ 0.37275328],
                                               [-0.03172939]])))
         self.assertTrue(np.allclose(network.weights_input_to_hidden,
-                                    np.array([[ 0.10562014, -0.20185996], 
-                                              [0.39775194, 0.50074398], 
+                                    np.array([[ 0.10562014, -0.20185996],
+                                              [0.39775194, 0.50074398],
                                               [-0.29887597, 0.19962801]])))
 
     def test_run(self):
@@ -538,7 +539,7 @@ unittest.TextTestRunner().run(suite)
     .....
     ----------------------------------------------------------------------
     Ran 5 tests in 0.013s
-    
+
     OK
 
 
@@ -585,9 +586,9 @@ for ii in range(iterations):
     # Go through a random batch of 128 records from the training data set
     batch = np.random.choice(train_features.index, size=128)
     X, y = train_features.ix[batch].values, train_targets.loc[batch]['cnt']
-                             
+
     network.train(X, y)
-    
+
     # Printing out the training progress
     train_loss = MSE(network.run(train_features).T, train_targets['cnt'].values)
     val_loss = MSE(network.run(val_features).T, val_targets['cnt'].values)
@@ -595,18 +596,18 @@ for ii in range(iterations):
                      + "% ... Training loss: " + str(train_loss)[:5] \
                      + " ... Validation loss: " + str(val_loss)[:5])
     sys.stdout.flush()
-    
+
     losses['train'].append(train_loss)
     losses['validation'].append(val_loss)
 ```
 
     Progress: 0.1% ... Training loss: 4.216 ... Validation loss: 3.466
 
-    /opt/conda/lib/python3.6/site-packages/ipykernel_launcher.py:17: DeprecationWarning: 
+    /opt/conda/lib/python3.6/site-packages/ipykernel_launcher.py:17: DeprecationWarning:
     .ix is deprecated. Please use
     .loc for label based indexing or
     .iloc for positional indexing
-    
+
     See the documentation here:
     http://pandas.pydata.org/pandas-docs/stable/indexing.html#ix-indexer-is-deprecated
 
@@ -622,7 +623,7 @@ _ = plt.ylim()
 ```
 
 
-![png](output_20_0.png)
+![png](images/output_20_0.png)
 
 
 ## Check out your predictions
@@ -647,17 +648,14 @@ _ = ax.set_xticklabels(dates[12::24], rotation=45)
 ```
 
 
-![png](output_22_0.png)
+![png](images/output_22_0.png)
 
 
 ## OPTIONAL: Thinking about your results(this question will not be evaluated in the rubric).
- 
+
 Answer these questions about your results. How well does the model predict the data? Where does it fail? Why does it fail where it does?
 
 > **Note:** You can edit the text in this cell by double clicking on it. When you want to render the text, press control + enter
 
 #### Your answer below
-The model predicts the bike-sharing data quite well. It is not accurate in December because we did not have enough data in that period. 
-
-## Submitting:
-Open up the 'jwt' file in the first-neural-network directory (which also contains this notebook) for submission instructions
+The model predicts the bike-sharing data quite well. It is not accurate in December because we did not have enough data in that period.
